@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#C17A5A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>MAJU Moda Feminina — Moda que veste a alma</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- POPUP -->
+<div class="pop-ov" id="popOv">
+  <div class="popup">
+    <div class="pop-img-w" style="position:relative">
+      <button class="pop-close-abs" onclick="closePopup()">✕</button>
+      <img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="MAJU">
+    </div>
+    <div class="pop-body">
+      <button class="pop-close-rel" onclick="closePopup()">✕</button>
+      <p class="pop-tag">Exclusivo para você</p>
+      <h2 class="pop-title">Ganhe <em>10% OFF</em><br>na 1ª compra</h2>
+      <p class="pop-sub">Cadastre-se e receba desconto imediato + acesso antecipado a todas as novidades.</p>
+      <div class="pop-code" onclick="copyCode()"><strong>MAJU10</strong><p id="popTxt">Clique para copiar</p></div>
+      <a href="https://wa.me/5521964824525?text=Oi! Quero usar o cupom MAJU10 🛍" class="btn btn-t btn-full" style="margin-bottom:10px"><span>Comprar pelo WhatsApp</span></a>
+      <span class="pop-skip" onclick="closePopup()">Não, obrigada — prefiro pagar mais</span>
+    </div>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="c-ov" id="cOv" onclick="closeCart()"></div>
+<div class="c-drawer" id="cDraw">
+  <div class="c-head" style="flex-direction:column; align-items:flex-start; padding-bottom:12px;">
+    <div style="display:flex; justify-content:space-between; width:100%; align-items:center; margin-bottom:12px;">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--brown);">Minha Sacola <span id="c-count" style="font-size:14px;color:var(--muted);font-weight:300;font-family:'DM Sans',sans-serif;"></span></h3>
+      <button class="c-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="c-progress-wrap">
+      <p id="c-progress-text">Faltam <strong>R$ 299,00</strong> para <strong>Frete Grátis</strong></p>
+      <div class="c-progress-bar"><div class="c-progress-fill" id="cProgressFill"></div></div>
+    </div>
+  </div>
+  <div class="c-body" id="c-body">
+    <div class="c-empty">🛍<br><br>Seu carrinho está vazio.<br>Explore nossas novidades!</div>
+  </div>
+  <div class="c-foot" id="c-foot" style="display:none;">
+    <div class="c-total"><span>Total</span><strong id="c-total-val">R$ 0,00</strong></div>
+    <button class="btn btn-t btn-full" onclick="irCheckout()" style="margin-bottom:10px;"><span>Finalizar compra</span></button>
+    <a id="wpp-cart-link" href="#" class="btn btn-g btn-full"><span>📱 Finalizar pelo WhatsApp</span></a>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="ck-ov" id="ckOv">
+  <div class="ck-box">
+    <div class="ck-head">
+      <h3 id="ck-title">Finalizar compra</h3>
+      <button class="ck-close" onclick="ckClose()">✕</button>
+    </div>
+    <div class="ck-body">
+      <div class="ck-steps-bar">
+        <div class="ck-step-dot done" id="dot1"></div>
+        <div class="ck-step-dot" id="dot2"></div>
+        <div class="ck-step-dot" id="dot3"></div>
+      </div>
+
+      <!-- STEP 1: DADOS PESSOAIS -->
+      <div class="ck-step active" id="ck-step1">
+        <p class="ck-subtitle">Seus dados</p>
+        <div class="ck-grid">
+          <div class="ck-field ck-full"><label>Nome completo *</label><input type="text" id="ck-nome" placeholder="Maria Silva"></div>
+          <div class="ck-field"><label>E-mail *</label><input type="email" id="ck-email" placeholder="maria@email.com"></div>
+          <div class="ck-field"><label>WhatsApp *</label><input type="tel" id="ck-fone" placeholder="(21) 99999-9999" oninput="maskFone(this)"></div>
+        </div>
+        <p class="ck-subtitle" style="margin-top:20px;">Endereço de entrega</p>
+        <div class="ck-grid">
+          <div class="ck-field">
+            <label>CEP *</label>
+            <div class="cep-wrap">
+              <input type="text" id="ck-cep" placeholder="00000-000" maxlength="9" oninput="maskCep(this)" onblur="buscaCep()">
+              <span class="cep-spin" id="cep-spin">⏳</span>
+            </div>
+          </div>
+          <div class="ck-field"><label>Estado</label><input type="text" id="ck-uf" placeholder="RJ" maxlength="2" readonly style="background:var(--cream2);"></div>
+          <div class="ck-field ck-full"><label>Rua / Avenida *</label><input type="text" id="ck-rua" placeholder="Rua das Flores"></div>
+          <div class="ck-field"><label>Número *</label><input type="text" id="ck-num" placeholder="123" id="ck-num"></div>
+          <div class="ck-field"><label>Complemento</label><input type="text" id="ck-comp" placeholder="Apto 4B"></div>
+          <div class="ck-field"><label>Bairro *</label><input type="text" id="ck-bairro" placeholder="Centro"></div>
+          <div class="ck-field ck-full"><label>Cidade *</label><input type="text" id="ck-cidade" placeholder="Rio de Janeiro" readonly style="background:var(--cream2);"></div>
+        </div>
+        <button class="btn btn-t btn-full" onclick="ckStep2()" style="margin-top:20px;"><span>Continuar →</span></button>
+      </div>
+
+      <!-- STEP 2: RESUMO DO PEDIDO -->
+      <div class="ck-step" id="ck-step2">
+        <p class="ck-subtitle">Resumo do pedido</p>
+        <div id="ck-items"></div>
+        <div class="ck-total-row"><span>Total</span><strong id="ck-total">R$ 0,00</strong></div>
+        <div class="ck-addr-preview" id="ck-addr-preview"></div>
+        <div class="ck-divider"></div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button class="btn btn-t btn-full" onclick="ckConfirmar()"><span>✅ Confirmar pedido</span></button>
+          <button class="btn btn-g btn-full" onclick="ckWhatsapp()"><span>📱 Finalizar pelo WhatsApp</span></button>
+          <button class="btn btn-o btn-full" onclick="ckStep1()"><span>← Voltar</span></button>
+        </div>
+      </div>
+
+      <!-- STEP 3: CONFIRMADO -->
+      <div class="ck-step" id="ck-step3" style="text-align:center;padding:20px 0;">
+        <div style="font-size:56px;margin-bottom:16px;">🎉</div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--brown);margin-bottom:12px;">Pedido <em style="font-style:italic;color:var(--terra);">confirmado!</em></h2>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:24px;">Recebemos seu pedido e entraremos em contato pelo WhatsApp para combinar a entrega e pagamento.</p>
+        <div id="ck-num-pedido" style="background:var(--cream2);padding:16px;margin-bottom:24px;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--terra);"></div>
+        <button class="btn btn-t btn-full" onclick="ckClose();cartClear();"><span>Continuar comprando</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mob-overlay" id="mobOv" onclick="closeMob()"></div>
+<div class="mob-drawer" id="mobDraw">
+  <div class="mob-head"><span class="mob-logo">MAJU</span><button class="mob-close" onclick="closeMob()">✕</button></div>
+  <div class="mob-search">
+    <input type="text" placeholder="Buscar peças..." oninput="handleSearch(this.value); if(this.value && this.value.length > 2) { closeMob(); document.getElementById('produtos').scrollIntoView(); }">
+  </div>
+  <div class="mob-nav">
+    <a href="#" onclick="closeMob()">Novidades</a>
+    <a href="#produtos" onclick="closeMob()">Coleções</a>
+    <a href="#plus" onclick="closeMob()">Plus Size</a>
+    <a href="#sale" onclick="closeMob()">Sale 50% OFF</a>
+    <a href="#insta" onclick="closeMob()">Instagram</a>
+    <a href="#contato" onclick="closeMob()">Contato & Loja</a>
+    <a href="#" onclick="closeMob()">Sobre</a>
+  </div>
+  <div class="mob-foot">
+    <a href="https://wa.me/5521964824525?text=Oi! Vim pelo site da MAJU 🌸" class="btn btn-g btn-full"><span>📱 WhatsApp</span></a>
+    <a href="https://instagram.com/_maju.modafeminina" class="btn btn-o btn-full" style="font-size:10px"><span>📸 @_maju.modafeminina</span></a>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner">
+    <span>✦ Frete grátis acima de R$299 <em>·</em> Todo Brasil</span>
+    <span>✦ Até 50% OFF <em>·</em> Por tempo limitado</span>
+    <span>✦ Plus Size do P ao 4G <em>·</em> Para todas</span>
+    <span>✦ 12x sem juros <em>·</em> Todos os cartões</span>
+    <span>✦ Troca grátis em 30 dias <em>·</em> Sem burocracia</span>
+    <span>✦ Frete grátis acima de R$299 <em>·</em> Todo Brasil</span>
+    <span>✦ Até 50% OFF <em>·</em> Por tempo limitado</span>
+    <span>✦ Plus Size do P ao 4G <em>·</em> Para todas</span>
+    <span>✦ 12x sem juros <em>·</em> Todos os cartões</span>
+    <span>✦ Troca grátis em 30 dias <em>·</em> Sem burocracia</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo"><span class="nav-logo-m">MAJU</span><span class="nav-logo-s">Moda Feminina</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Novidades</a></li>
+    <li><a href="#produtos">Coleções</a></li>
+    <li><a href="#plus">Plus Size</a></li>
+    <li><a href="#sale">Sale</a></li>
+    <li><a href="#insta">Lookbook</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="#">Sobre</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="search-box" id="searchBox">
+      <input type="text" id="searchInput" class="search-input" placeholder="Buscar..." oninput="handleSearch(this.value)">
+      <button class="ico search-toggle" aria-label="Buscar" onclick="toggleSearch()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+    </div>
+    <button class="ico cart-btn" onclick="openCart()" aria-label="Sacola">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+      <span class="cc" id="cc">0</span>
+    </button>
+    <button class="ham" id="ham" onclick="toggleMob()" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Coleção Primavera/Verão 2025</p>
+    <h1 class="hero-h1">Moda que<br>veste a<br><em>alma.</em></h1>
+    <div class="hero-proof"><span class="stars">★★★★★</span><p class="proof-txt"><strong>132 mil</strong> mulheres<br>já escolheram a MAJU</p></div>
+    <p class="hero-sub">Peças únicas para mulheres reais — do P ao 4G. Entregamos para todo o Brasil com preços que cabem no coração.</p>
+    <div class="hero-btns">
+      <a href="#produtos" class="btn btn-t"><span>Ver Coleção</span></a>
+      <a href="https://wa.me/5521964824525?text=Oi! Vim pelo site e quero conhecer as peças 🌸" class="btn btn-o"><span>WhatsApp</span></a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="MAJU Coleção">
+    <div class="hero-badge"><span class="badge-n">50%</span><span class="badge-s">OFF</span></div>
+    <div class="hero-tag"><p>Enviamos para</p><strong>Todo o Brasil 🇧🇷</strong></div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<div class="proof-strip">
+  <div class="p-item rv"><span class="p-icon">👥</span><div class="p-data"><strong>132K</strong><span>Seguidoras</span></div></div>
+  <div class="p-item rv" style="transition-delay:.07s"><span class="p-icon">📦</span><div class="p-data"><strong>1.985</strong><span>Posts</span></div></div>
+  <div class="p-item rv" style="transition-delay:.14s"><span class="p-icon">⭐</span><div class="p-data"><strong>4.9/5</strong><span>Avaliação</span></div></div>
+  <div class="p-item rv" style="transition-delay:.21s"><span class="p-icon">🇧🇷</span><div class="p-data"><strong>Todo BR</strong><span>Entregamos</span></div></div>
+  <div class="p-item rv" style="transition-delay:.28s"><span class="p-icon">🏪</span><div class="p-data"><strong>2 Lojas</strong><span>Rio de Janeiro</span></div></div>
+</div>
+
+<!-- URGENCY -->
+<div class="urgency" id="sale">
+  <div class="rl">
+    <p class="u-tag">✦ Oferta relâmpago — só hoje</p>
+    <h2 class="u-title">Não perca —<br><em>acaba hoje.</em></h2>
+    <p class="u-sub">Até 50% OFF em peças selecionadas.<br>Estoque limitado. Quando acabar, acabou.</p>
+  </div>
+  <div class="u-sep"></div>
+  <div class="rr" style="display:flex;flex-direction:column;align-items:flex-end;gap:14px;">
+    <p class="u-tag" style="text-align:right">A promoção encerra em</p>
+    <div class="cd">
+      <div class="cd-box"><span class="cd-num" id="h">08</span><p class="cd-lbl">Horas</p></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-box"><span class="cd-num" id="m">45</span><p class="cd-lbl">Min</p></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-box"><span class="cd-num" id="s">00</span><p class="cd-lbl">Seg</p></div>
+    </div>
+    <a href="https://wa.me/5521964824525?text=Quero aproveitar a promoção MAJU! 🔥" class="btn btn-t"><span>Aproveitar agora</span></a>
+  </div>
+</div>
+
+<!-- PRODUTOS BATCH 1 -->
+<section class="products" id="produtos">
+  <div class="p-header rv">
+    <div><p class="s-tag">Em destaque</p><h2 class="s-title">As <em>queridinhas</em></h2></div>
+
+    <div class="p-filters" id="pFilters">
+      <button class="p-filter-btn active" data-filter="all">Todos</button>
+      <button class="p-filter-btn" data-filter="Vestidos">Vestidos</button>
+      <button class="p-filter-btn" data-filter="Conjuntos">Conjuntos</button>
+      <button class="p-filter-btn" data-filter="Macacões">Macacões</button>
+      <button class="p-filter-btn" data-filter="Plus Size">Plus Size</button>
+    </div>
+  </div>
+  <div class="p-grid" id="grid-destaques">
+    <div class="p-card rv"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Vestido Halter Tricô"><span class="p-badge b-new">Novo</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Vestidos</p><h3 class="p-name">Vestido Halter Tricô</h3><div class="p-price"><span class="p-new">R$ 249,90</span><span class="p-old">R$ 380,00</span><span class="p-disc">-34%</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.08s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Vestido Preto Bodycon"><span class="p-badge b-sale">Sale</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Vestidos</p><h3 class="p-name">Vestido Preto Bodycon</h3><div class="p-price"><span class="p-new">R$ 189,90</span><span class="p-old">R$ 290,00</span><span class="p-disc">-34%</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.16s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Vestido Floral Tropical"><span class="p-badge b-plus">Plus Size</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">1G</button><button class="sz">2G</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Vestidos Longos</p><h3 class="p-name">Vestido Floral Tropical</h3><div class="p-price"><span class="p-new">R$ 319,90</span><span class="p-old">R$ 480,00</span><span class="p-disc">-33%</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.24s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Macacão Bordado"><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Macacões</p><h3 class="p-name">Macacão Bordado Floral</h3><div class="p-price"><span class="p-new">R$ 289,90</span></div></div></div>
+  </div>
+</section>
+
+<!-- PRODUTOS BATCH 2 -->
+<section class="products" style="padding-top:0">
+  <div class="p-header rv">
+    <div><p class="s-tag">Acabou de chegar</p><h2 class="s-title">Novos <em>lançamentos</em></h2></div>
+    <button class="see-all" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;" onclick="openCollectionCarousel('Novidades', 'Lançamentos')">Ver tudo</button>
+  </div>
+  <div class="p-grid" id="grid-lancamentos">
+    <div class="p-card rv"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Conjunto Lilás"><span class="p-badge b-new">Novo</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Conjuntos</p><h3 class="p-name">Conjunto Lilás Floral</h3><div class="p-price"><span class="p-new">R$ 359,90</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.08s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Vestido Amarelo"><span class="p-badge b-new">Novo</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Vestidos</p><h3 class="p-name">Vestido Amarelo Bordado</h3><div class="p-price"><span class="p-new">R$ 239,90</span><span class="p-old">R$ 340,00</span><span class="p-disc">-29%</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.16s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Macacão Amarelo"><span class="p-badge b-sale">Sale</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Macacões</p><h3 class="p-name">Macacão Amarelo Floral</h3><div class="p-price"><span class="p-new">R$ 299,90</span><span class="p-old">R$ 420,00</span><span class="p-disc">-28%</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.24s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Vestido Curto Floral"><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Vestidos</p><h3 class="p-name">Vestido Curto Floral</h3><div class="p-price"><span class="p-new">R$ 219,90</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.32s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Vestido Preto Floral"><span class="p-badge b-new">Novo</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Vestidos</p><h3 class="p-name">Vestido Preto Flores</h3><div class="p-price"><span class="p-new">R$ 259,90</span><span class="p-old">R$ 360,00</span><span class="p-disc">-27%</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.40s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Vestido Lilás Bordado"><span class="p-badge b-new">Novo</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">P</button><button class="sz">M</button><button class="sz">G</button><button class="sz">GG</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Vestidos</p><h3 class="p-name">Vestido Lilás Bordado</h3><div class="p-price"><span class="p-new">R$ 279,90</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.48s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Plus Size"><span class="p-badge b-plus">Plus Size</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">1G</button><button class="sz">2G</button><button class="sz">3G</button><button class="sz">4G</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Plus Size</p><h3 class="p-name">Vestido Longo Plus</h3><div class="p-price"><span class="p-new">R$ 319,90</span><span class="p-old">R$ 460,00</span><span class="p-disc">-30%</span></div></div></div>
+    <div class="p-card rv" style="transition-delay:.56s"><div class="p-wrap"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Plus Size"><span class="p-badge b-plus">Plus Size</span><button class="p-wish" onclick="this.classList.toggle('on')">♡</button><div class="p-ov"><div class="sz-row"><button class="sz">1G</button><button class="sz">2G</button><button class="sz">3G</button><button class="sz">4G</button></div><button class="add-btn" onclick="addCart()">Adicionar</button></div></div><div class="p-info"><p class="p-cat">Plus Size</p><h3 class="p-name">Conjunto Floral Plus</h3><div class="p-price"><span class="p-new">R$ 289,90</span></div></div></div>
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner rv">
+  <div class="promo-img"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="MAJU Editorial"><span class="promo-wm">MAJU</span></div>
+  <div class="promo-cnt">
+    <p class="promo-ey">✦ Promoção especial · Válida hoje</p>
+    <h2 class="promo-h">Você merece.<br><em>Aproveite agora.</em></h2>
+    <p class="promo-body">Seleção especial com desconto real. Sem pegadinha, sem letra miúda. Escolha, peça pelo WhatsApp e receba em casa.</p>
+    <div class="promo-offer"><span class="offer-n">50%</span><div class="offer-d"><strong>MAJU50</strong>Use esse código em<br>compras acima de R$ 399</div></div>
+    <a href="https://wa.me/5521964824525?text=Quero usar o cupom MAJU50! 🛍" class="btn btn-w"><span>Quero meu desconto</span></a>
+  </div>
+</div>
+
+<!-- PLUS SIZE -->
+<section class="plus" id="plus">
+  <div class="plus-inner">
+    <div class="rl plus-rel">
+      <div class="plus-img-grid">
+        <img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Plus Size" style="width:100%;aspect-ratio:2/3;object-fit:cover;object-position:top;grid-row:span 2">
+        <img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Plus Size" style="width:100%;height:calc(50% - 4px);object-fit:cover;object-position:top">
+        <img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="Plus Size" style="width:100%;height:calc(50% - 4px);object-fit:cover;object-position:top">
+      </div>
+      <div class="plus-tag-ov">Do P ao 4G</div>
+    </div>
+    <div class="rr">
+      <p class="s-tag">Moda para todas</p>
+      <h2 class="s-title" style="margin-bottom:18px">Plus Size<br>com <em>estilo</em></h2>
+      <p style="font-size:14px;line-height:1.95;color:var(--brown2);margin-bottom:28px">Na MAJU toda mulher encontra o seu tamanho e o seu estilo. Nossa linha Plus vai do 1G ao 4G com as mesmas peças lindas, mesmos tecidos e preços que você merece. <strong style="color:var(--terra)">Porque beleza não tem tamanho.</strong></p>
+      <div class="chip-row"><div class="chip">P</div><div class="chip">M</div><div class="chip">G</div><div class="chip">GG</div><div class="chip on">1G</div><div class="chip on">2G</div><div class="chip on">3G</div><div class="chip on">4G</div></div>
+      <button class="btn btn-t" onclick="openCollectionCarousel('Plus Size', 'Plus Size')"><span>Ver coleção Plus</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTI -->
+<section class="testi">
+  <p class="s-tag rv">Elas falam por nós</p>
+  <h2 class="s-title rv" style="margin-bottom:6px">Quem comprou <em>voltou</em></h2>
+  <p class="rv" style="font-size:13px;color:var(--muted)">Avaliações reais · clientes reais</p>
+  <div class="t-grid">
+    <div class="t-card rv"><div class="t-q">"</div><p class="t-stars">★★★★★</p><p class="t-txt">Recebi meu vestido em 3 dias, veio lindo e exatamente igual à foto. Já é minha segunda compra e com certeza não será a última. Atendimento pelo WhatsApp super rápido!</p><div class="t-auth"><div class="t-av"></div><div><p class="t-nm">Camila R.</p><p class="t-loc">Rio de Janeiro</p></div></div></div>
+    <div class="t-card rv" style="transition-delay:.1s"><div class="t-q">"</div><p class="t-stars">★★★★★</p><p class="t-txt">Finalmente uma loja com meu tamanho (3G) com roupas que eu quero usar! As peças são lindas, tecido com qualidade e preço justo. Amei demais!</p><div class="t-auth"><div class="t-av" style="background:var(--cream3)"></div><div><p class="t-nm">Fernanda M.</p><p class="t-loc">Duque de Caxias</p></div></div></div>
+    <div class="t-card rv" style="transition-delay:.2s"><div class="t-q">"</div><p class="t-stars">★★★★★</p><p class="t-txt">Comprei pelo WhatsApp, foi muito fácil! Me ajudaram a escolher o tamanho certo e o vestido chegou antes do prazo. Qualidade top! Super recomendo.</p><div class="t-auth"><div class="t-av" style="background:var(--terra4)"></div><div><p class="t-nm">Patrícia S.</p><p class="t-loc">Niterói, RJ</p></div></div></div>
+  </div>
+</section>
+
+<!-- WHY -->
+<div class="why">
+  <div class="w-item rv"><span class="w-icon">🚚</span><h4 class="w-title">Frete Grátis</h4><p class="w-txt">Em compras acima de R$299 para qualquer estado do Brasil</p></div>
+  <div class="w-item rv" style="transition-delay:.08s"><span class="w-icon">📱</span><h4 class="w-title">Compra Fácil</h4><p class="w-txt">Compre pelo WhatsApp, sem complicação nenhuma</p></div>
+  <div class="w-item rv" style="transition-delay:.16s"><span class="w-icon">💳</span><h4 class="w-title">12x Sem Juros</h4><p class="w-txt">Parcelamos em todos os cartões de crédito</p></div>
+  <div class="w-item rv" style="transition-delay:.24s"><span class="w-icon">🔄</span><h4 class="w-title">Troca Fácil</h4><p class="w-txt">30 dias para trocar sem custo. Sem burocracia.</p></div>
+</div>
+
+<!-- INSTAGRAM -->
+<section class="insta" id="insta">
+  <p class="s-tag rv">Siga a gente</p>
+  <h2 class="s-title rv">No <em>Instagram</em></h2>
+  <p class="insta-handle rv">@_maju.modafeminina</p>
+  <div class="insta-grid rv">
+    <div class="insta-cell"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="MAJU"><div class="insta-hov">📷</div></div>
+    <div class="insta-cell"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="MAJU"><div class="insta-hov">📷</div></div>
+    <div class="insta-cell"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="MAJU"><div class="insta-hov">📷</div></div>
+    <div class="insta-cell"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="MAJU"><div class="insta-hov">📷</div></div>
+    <div class="insta-cell"><img src="https://res.cloudinary.com/demo/image/fetch/f_auto,q_auto/https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop" loading="lazy" alt="MAJU Moda" alt="MAJU"><div class="insta-hov">📷</div></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="nl">
+  <div class="nl-bg"></div><div class="nl-wm">MAJU</div>
+  <div class="nl-in">
+    <p class="nl-tag rv">Clube MAJU</p>
+    <div class="nl-pill rv">🎁 Cadastre-se e ganhe 10% OFF</div>
+    <h2 class="nl-title rv">Entre para a <em>nossa turma</em></h2>
+    <p class="nl-sub rv">Receba novidades, promoções exclusivas e acesso antecipado antes de todo mundo.</p>
+    <form class="nl-form rv" onsubmit="return false"><input class="nl-field" type="email" placeholder="seu@email.com.br"><button class="btn btn-t" type="submit"><span>Quero!</span></button></form>
+    <p class="nl-disc rv">Sem spam. Cancele quando quiser. 💛</p>
+  </div>
+</section>
+
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="faq-inner">
+    <p class="s-tag rv">Dúvidas Frequentes</p>
+    <h2 class="s-title rv" style="margin-bottom:30px">Ficou com alguma <em>dúvida?</em></h2>
+    <div class="faq-list rv">
+      <div class="faq-item">
+        <button class="faq-q">Quais são as formas de pagamento? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Aceitamos Pix com 5% de desconto, Cartão de Crédito em até 12x (sem juros até 6x) e Boleto Bancário.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Qual o prazo de entrega? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>O prazo varia conforme o seu CEP. Entregamos para todo o Brasil e oferecemos frete grátis em compras acima de R$299.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">A MAJU realiza trocas? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Sim! A primeira troca é gratuita em até 30 dias úteis após o recebimento do pedido. Sem burocracia.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Como sei meu tamanho? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Você pode consultar nossa Tabela de Medidas detalhada em todos os produtos ou falar com a gente pelo WhatsApp!</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAPA & CONTATO -->
+<section class="mapcontact" id="contato">
+  <div class="mc-inner">
+
+    <!-- LEFT: infos de contato -->
+    <div class="mc-info rv">
+      <p class="s-tag">Onde nos encontrar</p>
+      <h2 class="s-title" style="margin-bottom:28px">Visite nossa <em>loja</em></h2>
+
+      <div class="mc-cards">
+
+        <div class="mc-card">
+          <div class="mc-card-icon">📍</div>
+          <div>
+            <h4 class="mc-card-title">Loja Centro</h4>
+            <p class="mc-card-text">Rua da Alfândega, 100 — Lj 02<br>Centro, Rio de Janeiro — RJ<br>CEP 20070-004</p>
+            <a href="https://maps.google.com/?q=Rua+da+Alfandega+100+Centro+Rio+de+Janeiro" target="_blank" class="mc-link">Abrir no Maps →</a>
+          </div>
+        </div>
+
+        <div class="mc-card">
+          <div class="mc-card-icon">📱</div>
+          <div>
+            <h4 class="mc-card-title">WhatsApp</h4>
+            <p class="mc-card-text">(21) 96482-4525<br>Atendimento rápido e fácil<br>Seg–Sáb · 9h às 20h</p>
+            <a href="https://wa.me/5521964824525?text=Oi! Vim pelo site e quero saber mais 🌸" target="_blank" class="mc-link">Chamar no WhatsApp →</a>
+          </div>
+        </div>
+
+        <div class="mc-card">
+          <div class="mc-card-icon">✉️</div>
+          <div>
+            <h4 class="mc-card-title">E-mail</h4>
+            <p class="mc-card-text">maju.modafemi@gmail.com<br>Respondemos em até<br>24 horas úteis</p>
+            <a href="mailto:maju.modafemi@gmail.com" class="mc-link">Enviar e-mail →</a>
+          </div>
+        </div>
+
+        <div class="mc-card">
+          <div class="mc-card-icon">📸</div>
+          <div>
+            <h4 class="mc-card-title">Instagram</h4>
+            <p class="mc-card-text">@_maju.modafeminina<br>132K seguidoras<br>Novidades todo dia</p>
+            <a href="https://instagram.com/_maju.modafeminina" target="_blank" class="mc-link">Seguir agora →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: mapa -->
+    <div class="mc-map rr">
+      <div class="mc-map-wrap">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3675.356!2d-43.1801!3d-22.9027!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x997ffe66e5555555%3A0x0!2sRua%20da%20Alf%C3%A2ndega%2C%20100%2C%20Centro%2C%20Rio%20de%20Janeiro!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr"
+          width="100%"
+          height="100%"
+          style="border:0;display:block;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="MAJU Moda Feminina — Rua da Alfândega, 100, Centro, Rio de Janeiro">
+        </iframe>
+        <div class="mc-map-badge">
+          <strong>MAJU</strong>
+          <span>Rua da Alfândega, 100 · Centro</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-top">
+    <div><span class="f-logo">MAJU</span><span class="f-sub">Moda Feminina</span><p class="f-desc">Moda que veste a alma. Peças para mulheres reais — estilo, qualidade e preço justo do P ao 4G.</p><div class="f-locs"><strong>Nossas lojas</strong>R. Alfândega, 100 · Lj 02 · Centro, RJ<br>Av. Dr. Plínio Casado, 1C · Caxias, RJ</div><div class="f-socs"><a href="https://instagram.com/_maju.modafeminina" class="f-soc">📸</a><a href="https://wa.me/5521964824525" class="f-soc">📱</a></div></div>
+    <div class="f-col"><h4>Loja</h4><ul><li><a href="#">Novidades</a></li><li><a href="#">Vestidos</a></li><li><a href="#">Conjuntos</a></li><li><a href="#">Plus Size</a></li><li><a href="#">Sale 50% OFF</a></li></ul></div>
+    <div class="f-col"><h4>Ajuda</h4><ul><li><a href="#">Guia de Tamanhos</a></li><li><a href="#">Como comprar</a></li><li><a href="#">Entregas</a></li><li><a href="#">Trocas</a></li></ul></div>
+    <div class="f-col"><h4>Contato</h4><ul><li><a href="https://wa.me/5521964824525">📱 (21) 96482-4525</a></li><li><a href="https://instagram.com/_maju.modafeminina">@_maju.modafeminina</a></li><li><a href="#">Centro · RJ</a></li><li><a href="#">Caxias · RJ</a></li></ul></div>
+  </div>
+  <div class="f-bot"><p>© 2025 MAJU Moda Feminina — Todos os direitos reservados</p><p>Feito com 🤎 no Rio de Janeiro</p></div>
+</footer>
+
+<!-- WPP -->
+<div class="wpp-wrap">
+  <div class="wpp-tip" id="wppTip">Compre pelo WhatsApp! 🛍</div>
+  <a href="https://wa.me/5521964824525?text=Oi! Vi o site da MAJU e quero saber mais 🌸" class="wpp-btn">📱</a>
+</div>
+
+
+<!-- QUICK VIEW MODAL -->
+<div class="qv-ov" id="qvOv">
+  <div class="qv-modal" id="qvModal">
+    <button class="qv-close" onclick="closeQuickView()">✕</button>
+    <div class="qv-content" id="qvContent"></div>
+  </div>
+</div>
+
+<!-- SIZE GUIDE MODAL -->
+<div class="sg-ov" id="sgOv">
+  <div class="sg-modal">
+    <button class="sg-close" onclick="closeSizeGuide()">✕</button>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--brown);margin-bottom:10px;">Tabela de Medidas</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Use uma fita métrica para encontrar o tamanho ideal para o seu corpo.</p>
+    <div style="overflow-x:auto;">
+      <table class="sg-table">
+        <thead><tr><th>Tamanho</th><th>Busto (cm)</th><th>Cintura (cm)</th><th>Quadril (cm)</th></tr></thead>
+        <tbody>
+          <tr><td>P (36/38)</td><td>82-86</td><td>64-68</td><td>90-94</td></tr>
+          <tr><td>M (40)</td><td>90-94</td><td>72-76</td><td>98-102</td></tr>
+          <tr><td>G (42)</td><td>98-102</td><td>80-84</td><td>106-110</td></tr>
+          <tr><td>GG (44)</td><td>106-110</td><td>88-92</td><td>114-118</td></tr>
+          <tr><td>1G (46)</td><td>110-114</td><td>92-96</td><td>118-122</td></tr>
+          <tr><td>2G (48)</td><td>114-118</td><td>96-100</td><td>122-126</td></tr>
+          <tr><td>3G (50)</td><td>118-122</td><td>100-104</td><td>126-130</td></tr>
+          <tr><td>4G (52)</td><td>122-126</td><td>104-108</td><td>130-134</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- CAROUSEL MODAL -->
+<div class="carousel-ov" id="carouselOv">
+  <div class="carousel-modal">
+    <div class="carousel-head">
+      <h3 id="carouselTitle" style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--brown);font-weight:300;">Coleção</h3>
+      <button class="carousel-close" onclick="closeCollectionCarousel()">✕</button>
+    </div>
+    <div class="carousel-track-wrap">
+      <button class="carousel-nav prev" onclick="scrollCarousel(-1)">‹</button>
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Injetado dinamicamente -->
+      </div>
+      <button class="carousel-nav next" onclick="scrollCarousel(1)">›</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
